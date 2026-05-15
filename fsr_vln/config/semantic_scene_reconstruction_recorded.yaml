@@ -2,7 +2,7 @@ main:
   device: cuda
   use_gpt: false
   dataset: horizon
-  scene_id: 20260515_120546
+  scene_id: "20260515_120546"
   dataset_path: /root/liu_ws/holoagent_data/0515_v1
   depth_cut: 6.0
   save_path: /root/liu_ws/holoagent_data/0515_v1
