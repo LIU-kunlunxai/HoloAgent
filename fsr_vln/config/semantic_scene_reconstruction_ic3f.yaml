@@ -3,16 +3,16 @@ main:
   use_gpt: false
   dataset: horizon #scannet # hm3dsem #replica #iphone
   scene_id: icra_ic3f
-  dataset_path: /mnt/holoagent/fsrvln/rgbd_datasets/
+  dataset_path: /root/liu_ws/HoloAgent/fsr_vln/rgbd_datasets/
   depth_cut: 6.0
-  save_path:  /mnt/holoagent/fsrvln/scene_graphs_opensource
+  save_path: /root/liu_ws/HoloAgent/fsr_vln/rgbd_datasets/scene_graphs_opensource
 models:
   clip:
     type: ViT-L/14 # ViT-B-32 # ViT-H-14 
-    checkpoint: checkpoints/open_clip_pytorch_model.bin
+    checkpoint: /root/liu_ws/HoloAgent/fsr_vln/checkpoints/open_clip_pytorch_model.bin
   sam:
-    checkpoint: checkpoints/sam_vit_h_4b8939.pth
-    type: vit_h
+    checkpoint: /root/liu_ws/HoloAgent/fsr_vln/checkpoints/sam_vit_l_0b3195.pth
+    type: vit_l
     points_per_side: 12
     pred_iou_thresh: 0.88
     points_per_batch: 144
