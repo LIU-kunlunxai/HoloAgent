@@ -29,6 +29,7 @@ class HorizonDataset(RGBDDataset):
         self.root_dir = cfg["root_dir"]
         self.transforms = cfg["transforms"]
         self.depth_cut = float(cfg["depth_cut"])
+        self.axis_mode = cfg.get("axis_mode", "g1")
         # pose_name = "colmap_pose"
         # camera_config_path = "orbslam3_rgbd.yaml"
         pose_name = "poses"
@@ -289,8 +290,12 @@ class HorizonDataset(RGBDDataset):
         # T_switch_axis = np.array([[1,0,0,0],[0,0,1,0],[0,-1,0,0],[0,0,0,1]], dtype=np.float64) # kitchen
         # T_switch_axis = np.array([[1,0,0,0],[0,-1,0,0],[0,0,-1,0],[0,0,0,1]],
         # dtype=np.float64) # go2_navi
-        T_switch_axis = np.array([[1, 0, 0, 0], [0, 0, 1, 0], [
-                                 0, -1, 0, 0], [0, 0, 0, 1]], dtype=np.float64)  # g1_navi fastlivo2
+        # T_switch_axis 根据配置选择坐标系
+        if self.axis_mode == "identity":
+            T_switch_axis = np.eye(4, dtype=np.float64)
+        else:
+            T_switch_axis = np.array([[1, 0, 0, 0], [0, 0, 1, 0], [
+                                     0, -1, 0, 0], [0, 0, 0, 1]], dtype=np.float64)  # g1_navi fastlivo2
         pose = T_switch_axis @ pose
         rgb_image = self._load_image(rgb_path)
         depth_image = self._load_depth(depth_path)

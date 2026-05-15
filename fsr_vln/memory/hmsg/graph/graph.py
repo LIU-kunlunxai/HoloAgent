@@ -138,7 +138,8 @@ class Graph:
             dataset_cfg = {
                 "root_dir": self.cfg.main.dataset_path,
                 "transforms": None,
-                "depth_cut": self.cfg.main.depth_cut}
+                "depth_cut": self.cfg.main.depth_cut,
+                "axis_mode": getattr(self.cfg.main, "axis_mode", "g1")}
             # import pdb; pdb.set_trace()
             if self.cfg.main.dataset == "hm3dsem":
                 self.dataset = HM3DSemDataset(dataset_cfg)
@@ -203,7 +204,8 @@ class Graph:
             dataset_cfg = {
                 "root_dir": self.cfg.main.dataset_path,
                 "transforms": None,
-                "depth_cut": self.cfg.main.depth_cut}
+                "depth_cut": self.cfg.main.depth_cut,
+                "axis_mode": getattr(self.cfg.main, "axis_mode", "g1")}
             if self.cfg.main.dataset == "hm3dsem":
                 self.dataset = HM3DSemDataset(dataset_cfg)
             elif self.cfg.main.dataset == "scannet":
@@ -2130,7 +2132,8 @@ class Graph:
                 sparse_floor_voronoi = nav_graph.connect_stairs_and_floor_graphs(
                     sparse_stairs_voronoi, sparse_floor_voronoi, nav_dir)
             NavigationGraph.save_voronoi_graph(
-                sparse_floor_voronoi, nav_dir, "sparse_voronoi"
+                sparse_floor_voronoi, nav_dir, "sparse_voronoi",
+                cell_size=nav_graph.cell_size, pcd_min=nav_graph.pcd_min,
             )
 
             if last_nav_graph is not None and last_nav_graph.has_stairs:
@@ -2143,7 +2146,8 @@ class Graph:
             global_voronoi = last_nav_graph.sparse_floor_voronoi
 
         NavigationGraph.save_voronoi_graph(
-            global_voronoi, nav_dir, "global_nav_graph")
+            global_voronoi, nav_dir, "global_nav_graph",
+            cell_size=last_nav_graph.cell_size, pcd_min=last_nav_graph.pcd_min)
 
     def set_room_names(self, room_names: List[str]):
         """
