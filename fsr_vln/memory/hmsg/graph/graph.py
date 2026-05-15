@@ -749,6 +749,14 @@ class Graph:
             floors.append([z_hist[1].min().item(), z_hist[1].max().item()])
             print("priors floors", floors)
 
+        # 过滤掉高度不足的楼层（单层场景切太碎的保护）
+        min_floor_height = 1.5
+        floors = [f for f in floors if f[1] - f[0] >= min_floor_height]
+        print("floors after height filter: ", floors)
+        if not floors:
+            floors.append([z_hist[1].min().item(), z_hist[1].max().item()])
+            print("fallback to single floor: ", floors)
+
         # 对第一个楼层和最后一个楼层进行扩展
         floors[0][0] = (floors[0][0] + np.min(downpcd[:, 1])) / 2
         # floors[-1][1] = (floors[-1][1] + np.max(downpcd[:, 1])) / 2
