@@ -8,3 +8,5 @@
 *.pth
 *.txt
 fsr_vln/rgbd_datasets/
+/memory
+__pycache__/
