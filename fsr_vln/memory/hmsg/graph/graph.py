@@ -970,7 +970,7 @@ class Graph:
 
         if pcd_2d.shape[0] == 0:
             print(f"  skip room: empty point cloud after filtering")
-            continue
+            return
 
         # define the grid size and resolution based on the 2d point cloud
         grid_size = (
