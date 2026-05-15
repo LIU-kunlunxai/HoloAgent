@@ -30,7 +30,7 @@ from memory.hmsg.utils.constants import MATTERPORT_LABELS_40
 from memory.hmsg.utils.clip_utils import get_text_feats_62_templates
 
 # change matplotlib backend to a gui one
-plt.switch_backend("TkAgg")
+plt.switch_backend("Agg")
 
 
 def compute_sdf(boundary_mask, distance_scale=1):
