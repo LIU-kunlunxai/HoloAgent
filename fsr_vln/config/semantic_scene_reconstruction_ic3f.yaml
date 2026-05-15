@@ -13,7 +13,7 @@ models:
   sam:
     checkpoint: /root/liu_ws/HoloAgent/fsr_vln/checkpoints/sam_vit_l_0b3195.pth
     type: vit_l
-    points_per_side: 12
+    points_per_side: 8
     pred_iou_thresh: 0.88
     points_per_batch: 144
     crop_n_layers: 0
@@ -21,7 +21,7 @@ models:
     min_mask_region_area: 100
 pipeline:
   voxel_size: 0.05
-  skip_frames: 15
+  skip_frames: 30
   init_overlap_thresh: 0.75
   overlap_thresh_factor: 0.025
   iou_thresh: 0.05
