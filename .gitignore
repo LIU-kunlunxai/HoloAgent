@@ -1,0 +1,10 @@
+*.png
+*.jpg
+*.jpeg
+*.PNG
+*.JPG
+*.JPEG
+/outputs
+*.pth
+*.txt
+fsr_vln/rgbd_datasets/
