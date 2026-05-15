@@ -47,6 +47,8 @@ semantic_scene_reconstruction_unified.
 
 
 import os
+import open3d as o3d
+o3d.utility.set_verbosity_level(o3d.utility.VerbosityLevel.Error)
 import hydra
 from omegaconf import DictConfig
 import sys
