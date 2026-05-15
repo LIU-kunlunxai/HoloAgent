@@ -3,9 +3,9 @@ main:
   use_gpt: false
   dataset: horizon
   scene_id: "20260515_120546"
-  dataset_path: /root/liu_ws/holoagent_data/0515_v1
+  dataset_path: /root/liu_ws/holoagent_data
   depth_cut: 6.0
-  save_path: /root/liu_ws/holoagent_data/0515_v1
+  save_path: /root/liu_ws/holoagent_data
 models:
   clip:
     type: ViT-L/14
