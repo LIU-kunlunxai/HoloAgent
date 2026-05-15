@@ -783,11 +783,14 @@ class Graph:
                     max_bound=(np.inf, floor[1], np.inf),
                 )
             )
+            floor_pts = np.array(floor_pcd.points)
+            if len(floor_pts) == 0:
+                print(f"  skip floor {floor[0]:.2f}~{floor[1]:.2f}: empty crop")
+                continue
             bbox = floor_pcd.get_axis_aligned_bounding_box()
             floor_obj.vertices = np.asarray(bbox.get_box_points())
             floor_obj.pcd = floor_pcd
-            floor_obj.floor_zero_level = np.min(
-                np.array(floor_pcd.points)[:, 1])
+            floor_obj.floor_zero_level = np.min(floor_pts[:, 1])
             floor_obj.floor_height = floor[1] - floor_obj.floor_zero_level
             self.floors.append(floor_obj)
             floors_pcd.append(floor_pcd)
@@ -964,6 +967,10 @@ class Graph:
 
         # print("pcd_2d.shape: ", pcd_2d.shape)
         # import pdb; pdb.set_trace()
+
+        if pcd_2d.shape[0] == 0:
+            print(f"  skip room: empty point cloud after filtering")
+            continue
 
         # define the grid size and resolution based on the 2d point cloud
         grid_size = (
@@ -1563,6 +1570,8 @@ class Graph:
                                 f"{floor.rooms[np.argmax(room_assoc)].room_id}_{floor.rooms[np.argmax(room_assoc)].object_counter}.png",
                             ))
 
+                if not room_assoc:
+                    continue
                 closest_room_idx = np.argmax(room_assoc)
 
                 name = self.identify_object(
@@ -1693,6 +1702,8 @@ class Graph:
                                 f"{floor.rooms[np.argmax(room_assoc)].room_id}_{floor.rooms[np.argmax(room_assoc)].object_counter}.png",
                             ))
 
+                if not room_assoc:
+                    continue
                 closest_room_idx = np.argmax(room_assoc)
 
                 name = self.identify_object(

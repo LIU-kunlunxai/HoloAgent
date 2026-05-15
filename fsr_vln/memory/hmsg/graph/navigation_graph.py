@@ -54,8 +54,16 @@ class NavigationGraph:
             floor_pcd (o3d.geometry.PointCloud): The point cloud of the floor.
             cell_size (int): the resolution of the cell (m/cell)
         """
-        self.pcd_min = np.min(np.array(floor_pcd.points), axis=0)
-        self.pcd_max = np.max(np.array(floor_pcd.points), axis=0)
+        pcd_pts = np.array(floor_pcd.points)
+        if len(pcd_pts) == 0:
+            self.pcd_min = np.zeros(3)
+            self.pcd_max = np.ones(3)
+            self.grid_size = np.array([1, 1], dtype=np.int32)
+            self.cell_size = cell_size
+            self.has_stairs = False
+            return
+        self.pcd_min = np.min(pcd_pts, axis=0)
+        self.pcd_max = np.max(pcd_pts, axis=0)
         self.grid_size = np.ceil(
             (self.pcd_max -
              self.pcd_min) /
@@ -318,7 +326,10 @@ class NavigationGraph:
         areas = output[2][:, -1]
         # TODO: the top region is 0 region, so we need to sort the areas and get the second largest
         # but I am not sure if the largest region is always the background
-        id = np.argsort(areas)[::-1][1]
+        sorted_ids = np.argsort(areas)[::-1]
+        if len(sorted_ids) < 2:
+            return np.zeros(binary_map.shape, dtype=bool)
+        id = sorted_ids[1]
         return output[1] == id
 
     def get_poses_region(
@@ -345,6 +356,9 @@ class NavigationGraph:
         Returns:
             pose_map (np.ndarray): The resulting pose region grid map. 1 is the pose region, 0 is the non-pose region.
         """
+        if not poses_list:
+            return np.zeros(self.grid_size[::-1], dtype=np.uint8)
+
         pose_heights = np.array([pose[1, 3] for pose in poses_list])
         clusters = DBSCAN(eps=0.1).fit(pose_heights.reshape(-1, 1))
         labels, counts = np.unique(clusters.labels_, return_counts=True)
@@ -354,6 +368,9 @@ class NavigationGraph:
         if cluster:
             poses_list = [pose for pose in poses_list if np.abs(
                 pose[1, 3] - major_height) < 0.1]
+
+            if not poses_list:
+                return np.zeros(self.grid_size[::-1], dtype=np.uint8)
 
             poses_min = np.min(np.array(poses_list)[:, 1, 3])
             poses_list = [
@@ -519,6 +536,8 @@ class NavigationGraph:
         )
         rows, cols = np.where(boundary_map == 1)
         boundaries = np.array(list(zip(rows, cols)))
+        if len(boundaries) < 3:
+            return nx.Graph(), []
         voronoi = Voronoi(boundaries)
 
         fig_free = main_free_map.copy().astype(np.uint8) * 255
