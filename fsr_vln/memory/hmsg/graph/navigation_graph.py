@@ -1363,7 +1363,13 @@ class NavigationGraph:
         return sparse_floor_voronoi
 
     @staticmethod
-    def save_voronoi_graph(graph: nx.Graph, floor_dir: str, name: str) -> None:
+    def save_voronoi_graph(
+        graph: nx.Graph,
+        floor_dir: str,
+        name: str,
+        cell_size: float = None,
+        pcd_min: np.ndarray = None,
+    ) -> None:
         """
         Save the Voronoi graph to a json file.
 
@@ -1371,8 +1377,15 @@ class NavigationGraph:
             graph (nx.Graph): The Voronoi graph.
             floor_dir (str): The directory where the intermediate results are stored.
             name (str): The name of the file.
+            cell_size (float, optional): The resolution of the grid.
+            pcd_min (np.ndarray, optional): The minimum coordinates of the point cloud.
         """
         graph_path = os.path.join(floor_dir, f"{name}_graph.json")
         graph_json = nx.node_link_data(graph)
+        if cell_size is not None and pcd_min is not None:
+            graph_json["meta"] = {
+                "cell_size": cell_size,
+                "pcd_min": pcd_min.tolist(),
+            }
         with open(graph_path, "w") as f:
             json.dump(graph_json, f, indent=4)
