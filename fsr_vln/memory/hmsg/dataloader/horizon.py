@@ -32,7 +32,15 @@ class HorizonDataset(RGBDDataset):
         # pose_name = "colmap_pose"
         # camera_config_path = "orbslam3_rgbd.yaml"
         pose_name = "poses"
-        camera_config_path = "d435i.yaml"
+        # auto-detect camera config file
+        detected_camera = None
+        for candidate in ["d455.yaml", "d435i.yaml"]:
+            if os.path.exists(os.path.join(self.root_dir, candidate)):
+                detected_camera = candidate
+                break
+        camera_config_path = detected_camera
+        # auto-detect pose file
+        
         if camera_config_path is not None and os.path.exists(os.path.join(self.root_dir, camera_config_path)):
             print("use camera config file: ", camera_config_path)
             self.rgb_intrinsics, self.depth_intrinsics = self.load_camera_params(os.path.join(self.root_dir, camera_config_path))
