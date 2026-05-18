@@ -2,17 +2,17 @@ main:
   device: cuda
   use_gpt: false
   dataset: horizon
-  scene_id: "20260515_120546"
-  dataset_path: /root/liu_ws/holoagent_data
+  scene_id: "bag_20260518_150039_dataset"
+  dataset_path: /root/workspace/holodata
   depth_cut: 6.0
   axis_mode: identity
-  save_path: /root/liu_ws/holoagent_data
+  save_path: /root/workspace/holodata
 models:
   clip:
     type: ViT-L/14
-    checkpoint: /root/liu_ws/HoloAgent/fsr_vln/checkpoints/open_clip_pytorch_model.bin
+    checkpoint: /root/workspace/HoloAgent/fsr_vln/checkpoints/open_clip_pytorch_model.bin
   sam:
-    checkpoint: /root/liu_ws/HoloAgent/fsr_vln/checkpoints/sam_vit_l_0b3195.pth
+    checkpoint: /root/workspace/HoloAgent/fsr_vln/checkpoints/sam_vit_l_0b3195.pth
     type: vit_l
     points_per_side: 8
     pred_iou_thresh: 0.88
